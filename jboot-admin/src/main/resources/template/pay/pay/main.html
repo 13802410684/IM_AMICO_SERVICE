@@ -1,0 +1,123 @@
+#include("/template/common/layout/_page_layout.html")
+#@layout()
+
+#define css()
+<style>
+
+</style>
+#end
+
+#define js()
+<script type="text/javascript">
+    		
+    var id="" ;
+    var time;
+	var isImage = false;
+	
+    
+    function getIMG(){		
+		$.ajax({
+            type: 'POST',
+            url: '/pay/api/getPayIdStatus',
+            data: { 
+            	'id': id, 
+            },
+            dataType: 'json',
+            returnAll:true,
+            timeout: 30000,
+            success: function (ret) {
+                if(ret.errorNo=="0"){
+                	if(ret.data.payStatus=="1"){
+                		if(isImage==false){
+                    		$(".layui-row").html('');
+                        	$(".layui-row").html('<img  src="/qr/'+ret.data.qrImage+'">');
+                        	isImage = true;
+                		}
+                	}
+					if(ret.data.payStatus=="2"){
+						$(".layui-row").html('');
+						$(".layui-row").html('支付成功');
+						isImage = false;
+						window.clearInterval(time); 
+                	}
+					if(ret.data.payStatus=="-1"){
+						$(".layui-row").html('');
+						isImage = false;
+						$(".layui-row").html('支付失败');
+						 window.clearInterval(time); 
+                	}
+                }
+            },
+            error: function (xhr, type) {
+                window.clearInterval(time); 
+            }
+        });
+	}
+    
+    $(function(){
+    	$(".layui-btn").click(function(){
+    		window.clearInterval(time);
+    		var money = $("#money").val();
+    		var userId = $("#userId").val();
+			$(".layui-row").html('正在获取支付二维码...');
+			$.ajax({
+	            type: 'POST',
+	            url: '/pay/api/transPay',
+	            data: { 
+	            	'amount': money, 
+	            	'userId': userId, 
+	            },
+	            dataType: 'json',
+	            returnAll:true,
+	            timeout: 30000,
+	            success: function (ret) {
+	                if(ret.errorNo=="0"){
+	                	$("#tip").html('');
+	                	$("#tip").html('get qr waiting ok');
+	                	id = ret.data.id;
+	                	time = window.setInterval(getIMG,1000);
+	                }else{
+	                	$("#tip").html('');
+	                	$("#tip").html('系统异常!');
+	                }
+	            },
+	            error: function (xhr, type) {
+	                alert("error");
+	            }
+	        });
+    	});
+    })		
+
+</script>
+#end
+
+#define content()
+    <div class="layui-fluid">
+            <div class="layui-form-pane">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">金额</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="money" name="money" placeholder="金额" class="layui-input"/>
+                    </div>
+                    <label class="layui-form-label">账户编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="userId" name="userId" placeholder="账户编号" class="layui-input"/>
+                    </div>
+                    <div class="layui-input-inline" style="width : 80px">
+                        <button class="layui-btn"  lay-submit="" lay-filter="search">确定支付</button>
+                    </div>
+                </div>
+            </div>
+        <hr>
+        <div class="layui-row">
+            
+            
+            
+        </div>
+    </div>
+
+<script type="text/html" id="barOption">
+
+  
+</script>
+#end

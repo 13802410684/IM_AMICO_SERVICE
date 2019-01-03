@@ -1,0 +1,85 @@
+#include("/template/common/layout/_page_layout.html")
+#@layout()
+
+#define css()
+<style>
+
+</style>
+#end
+
+#define js()
+<script type="text/javascript">
+    layui.use(['form', 'layer'], function () {
+        // 操作对象
+        var form = layui.form
+            , layer = layui.layer
+            , $ = layui.jquery;
+
+        form.on('submit(sub)', function(data){
+
+            util.sendAjax ({
+                type: 'POST',
+                url: '#(ctxPath)/auth/app/postUpdateQr',
+                data: $('#addForm').serialize(),
+                loadFlag: true,
+                success : function(data){
+                    pop_close();
+                }
+            });
+
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>
+#end
+
+#define content()
+<div class="x-body">
+    <form id="addForm" class="layui-form" action="">
+        <input type="hidden" name="authRedirectConfig.id" value="#(authRedirectConfig.id ??)">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><em class="require-mark">*</em>应用名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="authRedirectConfig.thirdPartyName" placeholder="应用名称" class="layui-input" value="#(authRedirectConfig.thirdPartyName ??)" required  lay-verify="required" autocomplete="off"/>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><em class="require-mark">*</em>公司名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="authRedirectConfig.thirdPartyHttp" placeholder="公司名称" class="layui-input" value="#(authRedirectConfig.thirdPartyHttp??)" required  lay-verify="required" autocomplete="off"/>
+            </div>
+        </div>
+
+
+		 <div class="layui-form-item">
+            <label class="layui-form-label"><em class="require-mark">*</em>是否需要确认</label>
+            <div class="layui-input-block">
+                <select id='status' name="authRedirectConfig.isAutoCommit" lay-verify="required">
+                    <option></option>
+                    #statusOption(io.jboot.admin.service.entity.status.system.AutoCommitStatus::me(), authRedirectConfig.isAutoCommit)
+                </select>
+            </div>
+        </div>
+        
+         <div class="layui-form-item">
+            <label class="layui-form-label"><em class="require-mark">*</em>重定向类型</label>
+            <div class="layui-input-block">
+                <select id='status' name=" authRedirectConfig.redirectType" lay-verify="required">
+                    <option></option>
+                    #statusOption(io.jboot.admin.service.entity.status.system.RedirectType::me(), authRedirectConfig.redirectType)
+                </select>
+            </div>
+        </div>
+
+  	
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <button  class="layui-btn" lay-filter="sub" lay-submit>
+                保存
+            </button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </form>
+</div>
+#end

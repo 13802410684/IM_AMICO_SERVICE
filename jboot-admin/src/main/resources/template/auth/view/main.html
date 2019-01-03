@@ -1,0 +1,46 @@
+#include("/template/common/layout/_page_layout.html")
+#@layout()
+
+#define css()
+<style>
+
+</style>
+#end
+
+#define js()
+<script type="text/javascript">  	 
+    $(function(){
+    	window.setInterval(function(){
+    		$.ajax({
+                type: 'POST',
+                url: '/auth/api/redirectTokenUrl',
+                data: { 
+                	'sessionId': '#(sessionId)', 
+                },
+                dataType: 'json',
+                returnAll:true,
+                timeout: 1000,
+                success: function (ret) {
+                    if(ret.errorNo=="0"){
+                    	window.location.href=ret.data;
+                    }
+                },
+                error: function (xhr, type) {
+                    window.clearInterval(time); 
+                }
+            });
+    	},1000*1);
+    })		
+
+</script>
+#end
+
+#define content()
+   <div style=" text-align:center">
+   		<img alt="" src="http://39.108.250.194/auth/api/generateQrImage?appId=1&redirectType=1&sessionId=#(sessionId)">
+   </div>
+<script type="text/html" id="barOption">
+
+  
+</script>
+#end

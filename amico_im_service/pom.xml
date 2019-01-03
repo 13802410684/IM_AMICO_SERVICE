@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>jboot-admin-parent</artifactId>
+        <groupId>io.jboot.admin</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+     <artifactId>amico_im_service</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+
+    <module>amico_im_service_entity</module>
+    <module>amico_im_service_api</module>
+    <module>amico_im_service_provider</module>
+    <module>amico_im_service_netty</module>
+    </modules>
+
+
+</project>
