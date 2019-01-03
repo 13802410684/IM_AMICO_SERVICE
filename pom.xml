@@ -23,7 +23,7 @@
         <module>jboot-wechat</module>
         <module>jboot-b2c-service</module>
         <module>jboot-b2c</module>
-    <module>auth_boot</module>
+    <module>auth_boot</module> 
     <module>amico_im_service</module>
     </modules>
 
